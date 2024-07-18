@@ -1,106 +1,93 @@
-import { createSlice, createAsyncThunk, isAction } from "@reduxjs/toolkit";
-import { fetchMovies, fetchMovieDetails, addToFavorites, addToWatchlist, getFavorites as fetchFavorites } from "../../api/api";
+import { createSlice } from "@reduxjs/toolkit";
+import { ActionType, getType } from "typesafe-actions";
+import * as actions from './../actions/movieActions';
 
-export const getMovies: any = createAsyncThunk("movies/getMovies", async () => {
-    const movies = await fetchMovies();
-    return movies;
-});
+type MoviesState = {
+  movies: any[],
+  movieDetails: any | null,
+  favorites: any[],
+  error: string | null,
+  status: string,
+};
 
-export const getMovieDetails: any = createAsyncThunk("movies/getMovieDetails", async (id: number) => {
-    const movieDetails = await fetchMovieDetails(id);
-    return movieDetails;
-});
-
-export const addMovieToFavorites: any = createAsyncThunk("movies/addMovieToFavorites", async ({ accountId, sessionId, mediaId }: { accountId: string, sessionId: string, mediaId: number }) => {
-    const response = await addToFavorites(accountId, sessionId, mediaId, 'movie', true);
-    return response;
-});
-
-export const addMovieToWatchlist: any = createAsyncThunk("movies/addMovieToWatchlist", async ({ accountId, sessionId, mediaId }: { accountId: string, sessionId: string, mediaId: number }) => {
-    const response = await addToWatchlist(accountId, sessionId, mediaId, 'movie', true);
-    return response;
-});
-
-const getFavorites: any = createAsyncThunk("movies/getFavouites", async(id:string)=> {
-    const favorites = await fetchFavorites(id)
-    return favorites;
-});
+const initialState: MoviesState = {
+  movies: [],
+  movieDetails: null,
+  favorites: [],
+  error: null,
+  status: "idle",
+};
 
 const movieSlice = createSlice({
-    name: "movies",
-    initialState: {
-        movies: [],
-        movieDetails: null,
-        favorites: [],
-        error: null,
-        status: "idle",
-    },
-    reducers: {},
-    extraReducers: (builder) => {
-        builder.addCase(getMovies.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-        })
-        builder.addCase(getMovies.fulfilled, (state, action) => {
-            state.status = "succeeded";
-            state.movies = action.payload;
-            state.error = null;
-        })
-        builder.addCase(getMovies.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        })
-        builder.addCase(getFavorites.pending,(state)=>{
-            state.status = "loding",
-            state.error = null;
-        })
-        builder.addCase(getFavorites.succeeded,(state,action)=> {
-            state.status = "succeeded",
-            state.favorites = action.payload;
-            state.error = null
-        })
-        builder.addCase(getFavorites.rejected,(state,action)=>{
-            state.status = "failed";
-            state.error = action.error.message
-        })
-        builder.addCase(getMovieDetails.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-        })
-        builder.addCase(getMovieDetails.fulfilled, (state, action) => {
-            state.status = "succeeded";
-            state.movieDetails = action.payload;
-            state.error = null;
-        })
-        builder.addCase(getMovieDetails.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        })
-        builder.addCase(addMovieToFavorites.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-        })
-        builder.addCase(addMovieToFavorites.fulfilled, (state, action) => {
-            state.status = "succeeded";
-            state.error = null;
-        })
-        builder.addCase(addMovieToFavorites.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        })
-        builder.addCase(addMovieToWatchlist.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-        })
-        builder.addCase(addMovieToWatchlist.fulfilled, (state, action) => {
-            state.status = "succeeded";
-            state.error = null;
-        })
-        builder.addCase(addMovieToWatchlist.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        })
-    }
+  name: "movies",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getType(actions.getMovies), (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getType(actions.getMoviesSuccess), (state, action) => {
+        state.status = "succeeded";
+        state.movies = action.payload;
+        state.error = null;
+      })
+      .addCase(getType(actions.getMoviesFailure), (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(getType(actions.getMovieDetails), (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getType(actions.getMovieDetailsSuccess), (state, action) => {
+        state.status = "succeeded";
+        state.movieDetails = action.payload;
+        state.error = null;
+      })
+      .addCase(getType(actions.getMovieDetailsFailure), (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(getType(actions.addMovieToFavorites), (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getType(actions.addMovieToFavoritesSuccess), (state) => {
+        state.status = "succeeded";
+        state.error = null;
+      })
+      .addCase(getType(actions.addMovieToFavoritesFailure), (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(getType(actions.addMovieToWatchlist), (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getType(actions.addMovieToWatchlistSuccess), (state) => {
+        state.status = "succeeded";
+        state.error = null;
+      })
+      .addCase(getType(actions.addMovieToWatchlistFailure), (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(getType(actions.getFavorites), (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getType(actions.getFavoritesSuccess), (state, action) => {
+        state.status = "succeeded";
+        state.favorites = action.payload;
+        state.error = null;
+      })
+      .addCase(getType(actions.getFavoritesFailure), (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      });
+  },
 });
 
 export default movieSlice.reducer;

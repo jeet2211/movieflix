@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createSession, createGuestSession, createRequestToken, validateWithLogin } from "../../api/api";
 
-export const login = createAsyncThunk("auth/login", async ({ username, password }: { username: string, password: string }) => {
+export const login: any = createAsyncThunk("auth/login", async ({ username, password }: { username: string, password: string }) => {
     const requestTokenResponse = await createRequestToken();
     const validatedResponse = await validateWithLogin(username, password, requestTokenResponse.request_token);
     const sessionResponse = await createSession(validatedResponse.request_token);

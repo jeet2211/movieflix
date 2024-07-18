@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { getMovies, addMovieToFavorites,addMovieToWatchlist } from '../../redux/slices/moviesSlice.ts'
+import { getMovies, addMovieToFavorites,addMovieToWatchlist } from '../../redux/actions/movieActions'
 import MovieListingView from './movie-listing-view';
 
 const MovieListingContainer: React.FC = () => {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './index.css'
-import { addToFavorites, addToWatchlist } from '../../api/api.ts';
 
 interface MovieListingRowViewProps {
   movie: {

@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="login-page">
+    <div>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div>
