@@ -7,6 +7,7 @@ interface MovieListingViewProps {
     title: string;
     poster_path: string;
   }[];
+<<<<<<< HEAD
   onAddToFavorites: (id: number) => void;
   onAddToWatchlist: (id: number) => void;
 }
@@ -20,6 +21,15 @@ const MovieListingView: React.FC<MovieListingViewProps> = ({ movies, onAddToFavo
           movie={movie} 
           onAddToFavorites={() => onAddToFavorites(movie.id)} 
           onAddToWatchlist={() => onAddToWatchlist(movie.id)} />
+=======
+}
+
+const MovieListingView: React.FC<MovieListingViewProps> = ({ movies }) => {
+  return (
+    <div className='movie-grid'>
+      {movies.map((movie) => (
+        <MovieListingRowView key={movie.id} movie={movie} />
+>>>>>>> origin/master
       ))}
     </div>
   );
