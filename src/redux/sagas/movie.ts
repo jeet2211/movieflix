@@ -68,7 +68,7 @@ function* watchFetchMoviesSaga() {
     yield takeEvery(movieAction.getFavorites, getFavoritesSaga);
   }
   
-export default function* mySaga() {
+export default function* movieSaga() {
     yield all([
       fork(watchFetchMoviesSaga),
       fork(watchFetchMovieDetailsSaga),
